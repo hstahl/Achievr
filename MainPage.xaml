@@ -7,7 +7,67 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d">
 
-    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
-
-    </Grid>
+    <SplitView
+        Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
+        x:Name="mainSplitView"
+        DisplayMode="Overlay"
+        IsPaneOpen="False"
+        OpenPaneLength="300"
+        CompactPaneLength="48">
+        <SplitView.Pane>
+            <StackPanel Background="Gray">
+                <Button
+                    Grid.Column="0"
+                    x:Name="paneHamburgerButton"
+                    Click="hamburgerButton_Click"
+                    Background="Transparent"
+                    Foreground="LightGray"
+                    Width="50"
+                    Height="50"
+                    FontFamily="Segoe MDL2 Assets"
+                    Content="&#xE700;"/>
+            </StackPanel>
+        </SplitView.Pane>
+        <SplitView.Content>
+            <StackPanel>
+                <Grid
+                    Background="{ThemeResource AppBarBackgroundThemeBrush}"
+                    BorderBrush="{ThemeResource AppBarBorderThemeBrush}"
+                    Height="50">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                    <Button
+                        Grid.Column="0"
+                        x:Name="hamburgerButton"
+                        Click="hamburgerButton_Click"
+                        Background="Transparent"
+                        Width="50"
+                        Height="50"
+                        FontFamily="Segoe MDL2 Assets"
+                        Content="&#xE700;"/>
+                    <TextBlock
+                        Grid.Column="1"
+                        x:Name="titleText"
+                        Text="Achievr"
+                        FontFamily="Arial"
+                        FontSize="32"
+                        TextAlignment="Left"
+                        VerticalAlignment="Center"/>
+                    <Button
+                        Grid.Column="2"
+                        x:Name="editButton"
+                        Click="editButton_Click"
+                        Background="Transparent"
+                        Width="50"
+                        Height="50"
+                        FontFamily="Segoe MDL2 Assets"
+                        Content="&#xE70F;"/>
+                </Grid>
+                <Canvas x:Name="mainCanvas"/>
+            </StackPanel>
+        </SplitView.Content>
+    </SplitView>
 </Page>

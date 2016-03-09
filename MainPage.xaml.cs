@@ -26,5 +26,15 @@ namespace Achievr
         {
             this.InitializeComponent();
         }
+
+        private void hamburgerButton_Click(object sender, RoutedEventArgs e)
+        {
+            mainSplitView.IsPaneOpen = !mainSplitView.IsPaneOpen;
+        }
+
+        private void editButton_Click(object sender, RoutedEventArgs e)
+        {
+            mainSplitView.IsPaneOpen = false;
+        }
     }
 }
