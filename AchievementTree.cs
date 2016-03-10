@@ -91,5 +91,10 @@ namespace Achievr
         {
             node.RemoveDependency(dependency);
         }
+
+        public override string ToString()
+        {
+            return "Achievement Tree " + name;
+        }
     }
 }

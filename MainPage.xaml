@@ -46,6 +46,21 @@
             <Image Style="{StaticResource achievement-icon-locked}"/>
             <TextBlock Style="{StaticResource achievement-title-text}"/>
         </StackPanel>
+        <Flyout x:Key="NewAchievementTreeNameDialog"
+                x:Name="NewAchievementTreeNameDialog">
+            <StackPanel>
+                <TextBox
+                    x:Name="NewAchievementNameBox"
+                    Width="300"
+                    Header="Name your tree"
+                    PlaceholderText="Enter name..."
+                    MaxLength="20"/>
+                <Button
+                    x:Name="NewAchievementCreateButton"
+                    Content="Create"
+                    Click="NewAchievementCreateButton_Click"/>
+            </StackPanel>
+        </Flyout>
     </Page.Resources>
     <SplitView
         Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
@@ -82,7 +97,7 @@
                     <Button
                         Grid.Column="2"
                     	x:Name="paneAddButton"
-                    	Click="paneAddButton_Click"
+                        Flyout="{StaticResource NewAchievementTreeNameDialog}"
                     	Background="Transparent"
                     	Foreground="LightGray"
                     	Width="50"

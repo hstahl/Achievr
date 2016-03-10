@@ -33,6 +33,8 @@ namespace Achievr
             var localSettings = Windows.Storage.ApplicationData.Current.LocalSettings;
             activeTree = (AchievementTree)localSettings.Values["activeTree"];
             savedTrees = (ArrayList)localSettings.Values["savedTrees"];
+            if (savedTrees == null)
+                savedTrees = new ArrayList();
             AchievementTree testTree = new AchievementTree("Test Tree");
             Achievement testAchievement = new Achievement("Test", "Just a test!");
             testAchievement.ToggleUnlocked();
@@ -81,9 +83,19 @@ namespace Achievr
             mainSplitView.IsPaneOpen = false;
         }
 
-        private void paneAddButton_Click(object sender, RoutedEventArgs e)
+        private void NewAchievementCreateButton_Click(object sender, RoutedEventArgs e)
         {
-            
+            string name = NewAchievementNameBox.Text;
+            if (name == null || name.Length == 0)
+                return;
+            if (activeTree != null)
+            {
+                Stack tempStack = new Stack(savedTrees);
+                tempStack.Push(activeTree);
+                savedTrees = new ArrayList(tempStack);
+            }
+            activeTree = new AchievementTree(name);
+            NewAchievementTreeNameDialog.Hide();
         }
     }
 }
