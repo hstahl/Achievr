@@ -35,6 +35,8 @@ namespace Achievr
             savedTrees = (ArrayList)localSettings.Values["savedTrees"];
             if (savedTrees == null)
                 savedTrees = new ArrayList();
+            if (activeTree != null)
+                titleText.Text = activeTree.ToString();
             AchievementTree testTree = new AchievementTree("Test Tree");
             Achievement testAchievement = new Achievement("Test", "Just a test!");
             testAchievement.ToggleUnlocked();

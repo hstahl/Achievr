@@ -94,7 +94,7 @@ namespace Achievr
 
         public override string ToString()
         {
-            return "Achievement Tree " + name;
+            return name;
         }
     }
 }
