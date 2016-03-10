@@ -3,7 +3,7 @@ using System.Reflection;
 
 namespace Achievr
 {
-    class Achievement
+    public class Achievement
     {
         string title;
         string description;
@@ -16,6 +16,16 @@ namespace Achievr
             this.description = description;
             this.score_value = score_value;
             unlocked = false;
+        }
+
+        public string GetName()
+        {
+            return title;
+        }
+
+        public string GetDescription()
+        {
+            return description;
         }
 
         public bool IsUnlocked()
@@ -58,7 +68,7 @@ namespace Achievr
         }
     }
 
-    class DueAchievement : Achievement
+    public class DueAchievement : Achievement
     {
         DateTime due_time;
         public DueAchievement(string title, string description, int score_value, DateTime due_time)

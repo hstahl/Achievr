@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Achievr
 {
-    class AchievementTree
+    public class AchievementTree
     {
         String name;
         ICollection<AchievementNode> nodes;
@@ -17,7 +17,7 @@ namespace Achievr
             nodes = new HashSet<AchievementNode>();
         }
 
-        internal class AchievementNode
+        public class AchievementNode
         {
             Achievement node;
             ICollection<AchievementNode> depends_on;
@@ -34,8 +34,8 @@ namespace Achievr
             {
                 return node;
             }
-            
-            public Tuple<int,int> GetLocation()
+
+            public Tuple<int,int> GetLocationOnCanvas()
             {
                 return coordinates;
             }
@@ -54,6 +54,11 @@ namespace Achievr
             {
                 depends_on.Remove(dependency);
             }
+        }
+
+        public ICollection<AchievementNode> GetNodes()
+        {
+            return nodes;
         }
 
         public int GetTotalScore(bool unlocked)
@@ -77,9 +82,14 @@ namespace Achievr
             nodes.Add(n);
         }
 
-        public void AddNodeDepedency(AchievementNode node, AchievementNode dependency)
+        public static void AddNodeDepedency(AchievementNode node, AchievementNode dependency)
         {
+            node.AddDependency(dependency);
+        }
 
+        public static void RemoveNodeDependency(AchievementNode node, AchievementNode dependency)
+        {
+            node.RemoveDependency(dependency);
         }
     }
 }

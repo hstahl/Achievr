@@ -7,6 +7,46 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d">
 
+    <Page.Resources>
+        <Style x:Key="achievement-container-style" TargetType="StackPanel">
+            <Setter Property="Orientation" Value="Horizontal"/>
+            <Setter Property="Height" Value="50"/>
+            <Setter Property="Width" Value="150"/>
+            <Setter Property="Background" Value="LightGray"/>
+        </Style>
+        <Style x:Key="achievement-icon-locked" TargetType="Image">
+            <Setter Property="Source" Value="Assets/hollow-star-icon-50x50.png"/>
+            <Setter Property="Width" Value="Auto"/>
+        </Style>
+        <Style x:Key="achievement-icon-unlocked" TargetType="Image">
+            <Setter Property="Source" Value="Assets/filled-star-icon-50x50.png"/>
+            <Setter Property="Width" Value="Auto"/>
+        </Style>
+        <Style x:Key="achievement-title-text" TargetType="TextBlock">
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="Text" Value="Hello achievement"/>
+            <Setter Property="TextWrapping" Value="Wrap"/>
+            <Setter Property="Width" Value="100"/>
+        </Style>
+        <Style x:Key="achievement-dependency-line" TargetType="Line">
+            <Setter Property="Stroke">
+                <Setter.Value>
+                    <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
+                        <GradientStop Color="Red" Offset="0.25"/>
+                        <GradientStop Color="Gray" Offset="0.75"/>
+                    </LinearGradientBrush>
+                </Setter.Value>
+            </Setter>
+            <Setter Property="StrokeThickness" Value="8"/>
+            <Setter Property="StrokeStartLineCap" Value="Triangle"/>
+            <Setter Property="StrokeEndLineCap" Value="Round"/>
+        </Style>
+        <StackPanel x:Key="achievement-container"
+            Style="{StaticResource achievement-container-style}">
+            <Image Style="{StaticResource achievement-icon-locked}"/>
+            <TextBlock Style="{StaticResource achievement-title-text}"/>
+        </StackPanel>
+    </Page.Resources>
     <SplitView
         Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
         x:Name="mainSplitView"
@@ -16,16 +56,41 @@
         CompactPaneLength="48">
         <SplitView.Pane>
             <StackPanel Background="Gray">
-                <Button
-                    Grid.Column="0"
-                    x:Name="paneHamburgerButton"
-                    Click="hamburgerButton_Click"
-                    Background="Transparent"
-                    Foreground="LightGray"
-                    Width="50"
-                    Height="50"
-                    FontFamily="Segoe MDL2 Assets"
-                    Content="&#xE700;"/>
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                    <Button
+                        Grid.Column="0"
+                        x:Name="paneHamburgerButton"
+                        Click="hamburgerButton_Click"
+                        Background="Transparent"
+                        Foreground="LightGray"
+                        Width="50"
+                        Height="50"
+                        FontFamily="Segoe MDL2 Assets"
+                        Content="&#xE700;"/>
+                    <TextBlock
+                        Grid.Column="1"
+                        Text="Saved achievement trees"
+                        FontSize="18"
+                        Foreground="LightGray"
+                        VerticalAlignment="Center"
+                        Width="Auto"/>
+                    <Button
+                        Grid.Column="2"
+                    	x:Name="paneAddButton"
+                    	Click="paneAddButton_Click"
+                    	Background="Transparent"
+                    	Foreground="LightGray"
+                    	Width="50"
+                    	Height="50"
+                    	FontFamily="Segoe MDL2 Assets"
+                    	Content="&#xE710;"
+                        ToolTipService.ToolTip="Create a new achievement tree..."/>
+                </Grid>
             </StackPanel>
         </SplitView.Pane>
         <SplitView.Content>
