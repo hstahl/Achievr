@@ -3,6 +3,7 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="using:Achievr"
+    xmlns:data="using:Achievr.Model"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d">
@@ -106,6 +107,47 @@
                     	Content="&#xE710;"
                         ToolTipService.ToolTip="Create a new achievement tree..."/>
                 </Grid>
+                <ListView ItemsSource="{x:Bind Path=ViewModel.SavedTrees}">
+                    <ListView.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <ItemsStackPanel/>
+                        </ItemsPanelTemplate>
+                    </ListView.ItemsPanel>
+                    <ListView.ItemTemplate>
+                        <DataTemplate x:DataType="data:AchievementTree">
+                            <StackPanel Orientation="Horizontal">
+                                <Canvas
+                                    Width="50"
+                                    Height="50">
+                                    <Ellipse
+                                        Canvas.Left="0"
+                                        Canvas.Top="0"
+                                        Fill="Green"
+                                        Height="50"
+                                        Width="50"/>
+                                    <TextBlock
+                                        Canvas.Top="15"
+                                        Height="50"
+                                        Width="50"
+                                        HorizontalAlignment="Center"
+                                        VerticalAlignment="Center"
+                                        TextAlignment="Center"
+                                        Text="{x:Bind Score}"/>
+                                </Canvas>
+                                <TextBlock 
+                                    Width="175"
+                                    Text="{x:Bind Name}"
+                                    VerticalAlignment="Center"/>
+                                <Button
+                                    Width="50"
+                                    Height="50"
+                                    Background="Transparent"
+                                    FontFamily="Segoe MDL2 Assets"
+                                    Content="&#xE74D;"/>
+                            </StackPanel>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
             </StackPanel>
         </SplitView.Pane>
         <SplitView.Content>

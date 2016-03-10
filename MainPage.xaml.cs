@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Achievr.Model;
+using Achievr.ViewModel;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
@@ -24,54 +26,58 @@ namespace Achievr
     /// </summary>
     public sealed partial class MainPage : Page
     {
-        AchievementTree activeTree;
-        ArrayList savedTrees;
+        public MainPageViewModel ViewModel { get; set; }
 
         public MainPage()
         {
             InitializeComponent();
             var localSettings = Windows.Storage.ApplicationData.Current.LocalSettings;
-            activeTree = (AchievementTree)localSettings.Values["activeTree"];
-            savedTrees = (ArrayList)localSettings.Values["savedTrees"];
+            AchievementTree activeTree = (AchievementTree)localSettings.Values["activeTree"];
+            ICollection<AchievementTree>savedTrees = (List<AchievementTree>)localSettings.Values["savedTrees"];
             if (savedTrees == null)
-                savedTrees = new ArrayList();
+                savedTrees = new List<AchievementTree>();
             if (activeTree != null)
                 titleText.Text = activeTree.ToString();
+            this.ViewModel = new MainPageViewModel(activeTree, savedTrees);
+
             AchievementTree testTree = new AchievementTree("Test Tree");
             Achievement testAchievement = new Achievement("Test", "Just a test!");
             testAchievement.ToggleUnlocked();
             testTree.AddNode(testAchievement, 50, 20);
             Achievement depAchievement = new Achievement("Deps", "Dep Test");
-            testTree.AddNode(depAchievement, 200, 200, testTree.GetNodes().First());
-            DrawAchievementTreeOnCanvas(testTree, mainCanvas);
+            testTree.AddNode(depAchievement, 200, 200, testTree.Nodes.First());
+
+            DrawAchievementTreeOnCanvas();
         }
 
-        private void DrawAchievementTreeOnCanvas(AchievementTree tree, Canvas canvas)
+        private void DrawAchievementTreeOnCanvas()
         {
-            canvas.Children.Clear();
-            foreach (AchievementTree.AchievementNode a in tree.GetNodes())
+            mainCanvas.Children.Clear();
+            if (ViewModel.ActiveTree == null)
+                return;
+            foreach (AchievementTree.AchievementNode a in ViewModel.ActiveTree.Nodes)
             {
                 StackPanel achievementContainer = new StackPanel();
                 achievementContainer.Style = Resources["achievement-container-style"] as Style;
-                Canvas.SetLeft(achievementContainer, a.GetLocationOnCanvas().Item1);
-                Canvas.SetTop(achievementContainer, a.GetLocationOnCanvas().Item2);
-                canvas.Children.Add(achievementContainer);
+                Canvas.SetLeft(achievementContainer, a.Coordinates.Item1);
+                Canvas.SetTop(achievementContainer, a.Coordinates.Item2);
+                mainCanvas.Children.Add(achievementContainer);
                 Image icon = new Image();
-                icon.Style = Resources[a.GetNode().IsUnlocked() ? "achievement-icon-unlocked" : "achievement-icon-locked"] as Style;
+                icon.Style = Resources[a.Node.Unlocked ? "achievement-icon-unlocked" : "achievement-icon-locked"] as Style;
                 achievementContainer.Children.Add(icon);
                 TextBlock titleText = new TextBlock();
                 titleText.Style = Resources["achievement-title-text"] as Style;
-                titleText.Text = a.GetNode().GetName();
+                titleText.Text = a.Node.Title;
                 achievementContainer.Children.Add(titleText);
-                foreach (AchievementTree.AchievementNode d in a.GetDependencies())
+                foreach (AchievementTree.AchievementNode d in a.DependsOn)
                 {
                     Line depArrow = new Line();
                     depArrow.Style = Resources["achievement-dependency-line"] as Style;
-                    depArrow.X1 = a.GetLocationOnCanvas().Item1;
-                    depArrow.Y1 = a.GetLocationOnCanvas().Item2;
-                    depArrow.X2 = d.GetLocationOnCanvas().Item1;
-                    depArrow.Y2 = d.GetLocationOnCanvas().Item2;
-                    canvas.Children.Add(depArrow);
+                    depArrow.X1 = a.Coordinates.Item1;
+                    depArrow.Y1 = a.Coordinates.Item2;
+                    depArrow.X2 = d.Coordinates.Item1;
+                    depArrow.Y2 = d.Coordinates.Item2;
+                    mainCanvas.Children.Add(depArrow);
                 }
             }
         }
@@ -92,21 +98,20 @@ namespace Achievr
             if (name == null || name.Length == 0)
                 return;
             UpdateActiveTree(new AchievementTree(name));
+            NewAchievementNameBox.Text = "";
             NewAchievementTreeNameDialog.Hide();
             mainSplitView.IsPaneOpen = false;
         }
 
         public void UpdateActiveTree(AchievementTree tree)
         {
-            if (activeTree != null)
+            if (ViewModel.ActiveTree != null)
             {
-                Stack tempStack = new Stack(savedTrees);
-                tempStack.Push(activeTree);
-                savedTrees = new ArrayList(tempStack);
+                ViewModel.SavedTrees.Insert(0, ViewModel.ActiveTree);
             }
-            activeTree = tree;
-            titleText.Text = activeTree.ToString();
-            DrawAchievementTreeOnCanvas(activeTree, mainCanvas);
+            ViewModel.ActiveTree = tree;
+            titleText.Text = ViewModel.ActiveTree.ToString();
+            DrawAchievementTreeOnCanvas();
         }
     }
 }
