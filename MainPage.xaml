@@ -3,7 +3,7 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="using:Achievr"
-    xmlns:data="using:Achievr.Model"
+    xmlns:data="using:Achievr.ViewModel"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d">
@@ -107,14 +107,18 @@
                     	Content="&#xE710;"
                         ToolTipService.ToolTip="Create a new achievement tree..."/>
                 </Grid>
-                <ListView ItemsSource="{x:Bind Path=ViewModel.SavedTrees}">
+                <ListView
+                    ItemsSource="{x:Bind SavedTreesViewModel.Trees, Mode=OneWay}"
+                    SelectedIndex="{x:Bind SavedTreesViewModel.SelectedIndex, Mode=TwoWay}"
+                    MinWidth="300"
+                    MinHeight="50">
                     <ListView.ItemsPanel>
                         <ItemsPanelTemplate>
                             <ItemsStackPanel/>
                         </ItemsPanelTemplate>
                     </ListView.ItemsPanel>
                     <ListView.ItemTemplate>
-                        <DataTemplate x:DataType="data:AchievementTree">
+                        <DataTemplate x:DataType="data:AchievementTreeViewModel">
                             <StackPanel Orientation="Horizontal">
                                 <Canvas
                                     Width="50"
@@ -135,19 +139,28 @@
                                         Text="{x:Bind Score}"/>
                                 </Canvas>
                                 <TextBlock 
-                                    Width="175"
+                                    Width="180"
                                     Text="{x:Bind Name}"
                                     VerticalAlignment="Center"/>
-                                <Button
-                                    Width="50"
-                                    Height="50"
-                                    Background="Transparent"
-                                    FontFamily="Segoe MDL2 Assets"
-                                    Content="&#xE74D;"/>
                             </StackPanel>
                         </DataTemplate>
                     </ListView.ItemTemplate>
                 </ListView>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock
+                        Text="{x:Bind SavedTreesViewModel.SelectedTree.Name, Mode=OneWay, FallbackValue=''}"/>
+                    <Button
+                        Content="&#xE74D;"
+                        FontFamily="Segoe MDL2 Assets"
+                        Background="Transparent"
+                        Width="50"
+                        Height="50"
+                        Click="{x:Bind SavedTreesViewModel.DeleteTree}"/>
+                    <Button
+                        x:Name="OpenTreeButton"
+                        Content="Open"
+                        Click="OpenTreeButton_Click"/>
+                </StackPanel>
             </StackPanel>
         </SplitView.Pane>
         <SplitView.Content>
@@ -173,7 +186,7 @@
                     <TextBlock
                         Grid.Column="1"
                         x:Name="titleText"
-                        Text="Achievr"
+                        Text="{x:Bind ActiveTreeViewModel.Active.Name, Mode=OneWay, FallbackValue=Achievr}"
                         FontFamily="Arial"
                         FontSize="32"
                         TextAlignment="Left"

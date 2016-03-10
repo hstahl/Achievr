@@ -5,10 +5,12 @@ namespace Achievr.Model
 {
     public class Achievement
     {
-        public string Title { get; }
-        public string Description { get; }
+        public string Title { get; set; }
+        public string Description { get; set; }
         public bool Unlocked { get; set; }
-        public int ScoreValue { get; }
+        public int ScoreValue { get; set; }
+
+        public Achievement() { }
 
         public Achievement(string title, string description, int scoreValue = 10)
         {

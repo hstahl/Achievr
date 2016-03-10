@@ -8,11 +8,16 @@ namespace Achievr.Model
 {
     public class AchievementTree
     {
-        public string Name { get; }
-        public ICollection<AchievementNode> Nodes { get; }
+        public string Name { get; set; }
+        public ICollection<AchievementNode> Nodes { get; set; }
         public string Score
         {
             get { return GetTotalScore(true) + "/" +GetTotalScore(false); }
+        }
+
+        public AchievementTree()
+        {
+            this.Nodes = new HashSet<AchievementNode>();
         }
 
         public AchievementTree(string name)
@@ -23,9 +28,11 @@ namespace Achievr.Model
 
         public class AchievementNode
         {
-            public Achievement Node { get; }
+            public Achievement Node { get; set; }
             public ICollection<AchievementNode> DependsOn { get; set; }
             public Tuple<int, int> Coordinates { get; set; }
+
+            public AchievementNode() { }
 
             internal protected AchievementNode(Achievement node, int x, int y)
             {
@@ -56,6 +63,11 @@ namespace Achievr.Model
             Nodes.Add(n);
         }
 
+        public void DeleteNode(AchievementNode node)
+        {
+            Nodes.Remove(node);
+        }
+
         public static void AddNodeDepedency(AchievementNode node, AchievementNode dependency)
         {
             node.DependsOn.Add(dependency);
@@ -69,6 +81,11 @@ namespace Achievr.Model
         public override string ToString()
         {
             return Name;
+        }
+
+        public void UpdateAdd(AchievementNode node)
+        {
+            Nodes.Add(node);
         }
     }
 }

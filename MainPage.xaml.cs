@@ -26,7 +26,8 @@ namespace Achievr
     /// </summary>
     public sealed partial class MainPage : Page
     {
-        public MainPageViewModel ViewModel { get; set; }
+        public SavedTreesViewModel SavedTreesViewModel { get; set; }
+        public ActiveAchievementTreeViewModel ActiveTreeViewModel { get; set; }
 
         public MainPage()
         {
@@ -38,7 +39,9 @@ namespace Achievr
                 savedTrees = new List<AchievementTree>();
             if (activeTree != null)
                 titleText.Text = activeTree.ToString();
-            this.ViewModel = new MainPageViewModel(activeTree, savedTrees);
+
+            this.SavedTreesViewModel = new SavedTreesViewModel();
+            this.ActiveTreeViewModel = new ActiveAchievementTreeViewModel();
 
             AchievementTree testTree = new AchievementTree("Test Tree");
             Achievement testAchievement = new Achievement("Test", "Just a test!");
@@ -53,9 +56,9 @@ namespace Achievr
         private void DrawAchievementTreeOnCanvas()
         {
             mainCanvas.Children.Clear();
-            if (ViewModel.ActiveTree == null)
+            if (ActiveTreeViewModel.Active == null)
                 return;
-            foreach (AchievementTree.AchievementNode a in ViewModel.ActiveTree.Nodes)
+            foreach (AchievementTree.AchievementNode a in this.ActiveTreeViewModel.Active.Nodes)
             {
                 StackPanel achievementContainer = new StackPanel();
                 achievementContainer.Style = Resources["achievement-container-style"] as Style;
@@ -97,21 +100,25 @@ namespace Achievr
             string name = NewAchievementNameBox.Text;
             if (name == null || name.Length == 0)
                 return;
-            UpdateActiveTree(new AchievementTree(name));
+            SavedTreesViewModel.NewTreeName = name;
+            SavedTreesViewModel.AddTree();
             NewAchievementNameBox.Text = "";
             NewAchievementTreeNameDialog.Hide();
-            mainSplitView.IsPaneOpen = false;
         }
 
-        public void UpdateActiveTree(AchievementTree tree)
+        public void UpdateActiveTree()
         {
-            if (ViewModel.ActiveTree != null)
-            {
-                ViewModel.SavedTrees.Insert(0, ViewModel.ActiveTree);
-            }
-            ViewModel.ActiveTree = tree;
-            titleText.Text = ViewModel.ActiveTree.ToString();
+            if (SavedTreesViewModel.SelectedIndex < 0)
+                return;
+            ActiveTreeViewModel.NextActive = SavedTreesViewModel.Trees[SavedTreesViewModel.SelectedIndex];
+            ActiveTreeViewModel.Activate();
             DrawAchievementTreeOnCanvas();
+        }
+
+        private void OpenTreeButton_Click(object sender, RoutedEventArgs e)
+        {
+            mainSplitView.IsPaneOpen = false;
+            UpdateActiveTree();
         }
     }
 }

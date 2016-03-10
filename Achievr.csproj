@@ -104,8 +104,14 @@
     <Compile Include="MainPage.xaml.cs">
       <DependentUpon>MainPage.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Model\ActiveAchievementTree.cs" />
+    <Compile Include="Model\SavedAchievementTrees.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ViewModel\MainPageViewModel.cs" />
+    <Compile Include="ViewModel\AchievementNodeViewModel.cs" />
+    <Compile Include="ViewModel\AchievementTreeViewModel.cs" />
+    <Compile Include="ViewModel\ActiveAchievementTreeViewModel.cs" />
+    <Compile Include="ViewModel\SavedTreesViewModel.cs" />
+    <Compile Include="ViewModel\ViewModelHelpers.cs" />
   </ItemGroup>
   <ItemGroup>
     <AppxManifest Include="Package.appxmanifest">
