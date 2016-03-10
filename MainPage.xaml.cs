@@ -46,6 +46,7 @@ namespace Achievr
 
         private void DrawAchievementTreeOnCanvas(AchievementTree tree, Canvas canvas)
         {
+            canvas.Children.Clear();
             foreach (AchievementTree.AchievementNode a in tree.GetNodes())
             {
                 StackPanel achievementContainer = new StackPanel();
