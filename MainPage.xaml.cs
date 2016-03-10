@@ -91,14 +91,22 @@ namespace Achievr
             string name = NewAchievementNameBox.Text;
             if (name == null || name.Length == 0)
                 return;
+            UpdateActiveTree(new AchievementTree(name));
+            NewAchievementTreeNameDialog.Hide();
+            mainSplitView.IsPaneOpen = false;
+        }
+
+        public void UpdateActiveTree(AchievementTree tree)
+        {
             if (activeTree != null)
             {
                 Stack tempStack = new Stack(savedTrees);
                 tempStack.Push(activeTree);
                 savedTrees = new ArrayList(tempStack);
             }
-            activeTree = new AchievementTree(name);
-            NewAchievementTreeNameDialog.Hide();
+            activeTree = tree;
+            titleText.Text = activeTree.ToString();
+            DrawAchievementTreeOnCanvas(activeTree, mainCanvas);
         }
     }
 }
