@@ -138,8 +138,7 @@
                                         TextAlignment="Center"
                                         Text="{x:Bind Score}"/>
                                 </Canvas>
-                                <TextBlock 
-                                    Width="180"
+                                <TextBlock
                                     Text="{x:Bind Name}"
                                     VerticalAlignment="Center"/>
                             </StackPanel>
@@ -147,9 +146,8 @@
                     </ListView.ItemTemplate>
                 </ListView>
                 <StackPanel Orientation="Horizontal">
-                    <TextBlock
-                        Text="{x:Bind SavedTreesViewModel.SelectedTree.Name, Mode=OneWay, FallbackValue=''}"/>
                     <Button
+                        Margin="13,5,5,0"
                         Content="&#xE74D;"
                         FontFamily="Segoe MDL2 Assets"
                         Background="Transparent"
