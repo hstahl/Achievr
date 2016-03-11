@@ -189,10 +189,10 @@
                         FontSize="32"
                         TextAlignment="Left"
                         VerticalAlignment="Center"/>
-                    <Button
+                    <ToggleButton
                         Grid.Column="2"
                         x:Name="editButton"
-                        Click="editButton_Click"
+                        IsEnabled="{x:Bind ActiveTreeViewModel.HasTreeLoaded, Mode=OneWay}"
                         Background="Transparent"
                         Width="50"
                         Height="50"

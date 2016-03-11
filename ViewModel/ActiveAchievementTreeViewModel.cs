@@ -19,6 +19,13 @@ namespace Achievr.ViewModel
             set { SetProperty(ref _Active, value); }
         }
 
+        private bool _HasTreeLoaded = false;
+        public bool HasTreeLoaded
+        {
+            get { return _HasTreeLoaded; }
+            set { SetProperty(ref _HasTreeLoaded, value); }
+        }
+
         public AchievementTreeViewModel NextActive { get; set; }
         public void Activate()
         {
@@ -26,6 +33,7 @@ namespace Achievr.ViewModel
             {
                 NextActive.PropertyChanged += Active_OnNotifyPropertyChanged;
                 Active = NextActive;
+                HasTreeLoaded = true;
             }
         }
 
