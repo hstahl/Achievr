@@ -17,13 +17,13 @@ namespace Achievr.Model
 
         public AchievementTree()
         {
-            this.Nodes = new HashSet<AchievementNode>();
+            this.Nodes = new List<AchievementNode>();
         }
 
         public AchievementTree(string name)
         {
             this.Name = name;
-            this.Nodes = new HashSet<AchievementNode>();
+            this.Nodes = new List<AchievementNode>();
         }
 
         public class AchievementNode
@@ -32,13 +32,26 @@ namespace Achievr.Model
             public ICollection<AchievementNode> DependsOn { get; set; }
             public Tuple<int, int> Coordinates { get; set; }
 
-            public AchievementNode() { }
+            public AchievementNode()
+            {
+                this.DependsOn = new List<AchievementNode>();
+            }
 
             internal protected AchievementNode(Achievement node, int x, int y)
             {
                 this.Node = node;
                 this.Coordinates = new Tuple<int,int>(x, y);
-                this.DependsOn = new HashSet<AchievementNode>();
+                this.DependsOn = new List<AchievementNode>();
+            }
+
+            public void UpdateAddDependency(AchievementNode dependency)
+            {
+                DependsOn.Add(dependency);
+            }
+
+            public void UpdateDeleteDependency(AchievementNode dependency)
+            {
+                DependsOn.Remove(dependency);
             }
         }
 

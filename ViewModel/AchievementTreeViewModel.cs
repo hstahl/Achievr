@@ -1,6 +1,5 @@
 ﻿using Achievr.Model;
 using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 
@@ -74,19 +73,18 @@ namespace Achievr.ViewModel
         }
         public int X { get; set; }
         public int Y { get; set; }
-        public AchievementNodeViewModel Dependency { get; set; }
 
         public void AddNode()
         {
             var node = new AchievementNodeViewModel();
-            node.PropertyChanged += AchievementNode_OnNotifyPropertyAdded;
+            node.PropertyChanged += AchievementTree_OnNotifyPropertyAdded;
             node.Node = new Achievement(Title, Description, ScoreValue);
             node.Node.Unlocked = false;
             node.Coordinates = new Tuple<int, int>(X, Y);
-            node.DependsOn = new List<AchievementTree.AchievementNode>();
             Nodes.Add(node);
             Score = This.Score;
             SelectedIndex = Nodes.IndexOf(node);
+            UpdateAvailableDependencies();
         }
 
         public void DeleteNode()
@@ -97,6 +95,7 @@ namespace Achievr.ViewModel
                 Nodes.RemoveAt(SelectedIndex);
                 This.DeleteNode(node);
                 Score = This.Score;
+                UpdateAvailableDependencies();
             }
         }
 
@@ -120,7 +119,26 @@ namespace Achievr.ViewModel
             }
         }
 
-        void AchievementNode_OnNotifyPropertyAdded(object sender, PropertyChangedEventArgs e)
+        // Available dependencies are achievement nodes which are not yet
+        // dependencies and are not the node itself
+        void UpdateAvailableDependencies()
+        {
+            for (int i = 0; i < Nodes.Count; i++)
+            {
+                var depList = new ObservableCollection<AchievementNodeViewModel>();
+                for (int j = 0; j < Nodes.Count; j++)
+                {
+                    if (j == i)
+                        continue;
+                    if (Nodes[i].DependsOn.Contains(Nodes[j]))
+                        continue;
+                    depList.Add(Nodes[j]);
+                }
+                Nodes[i].AvailableDependencies = depList;
+            }
+        }
+
+        void AchievementTree_OnNotifyPropertyAdded(object sender, PropertyChangedEventArgs e)
         {
             This.UpdateAdd((AchievementNodeViewModel)sender);
         }

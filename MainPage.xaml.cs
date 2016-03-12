@@ -49,7 +49,7 @@ namespace Achievr
             mainCanvas.Children.Clear();
             if (!ActiveTreeViewModel.HasTreeLoaded)
                 return;
-            foreach (AchievementTree.AchievementNode a in this.ActiveTreeViewModel.Active.Nodes)
+            foreach (AchievementNodeViewModel a in this.ActiveTreeViewModel.Active.Nodes)
             {
                 StackPanel achievementContainer = new StackPanel();
                 achievementContainer.Style = Resources["achievement-container-style"] as Style;
@@ -64,7 +64,7 @@ namespace Achievr
                 titleText.Style = Resources["achievement-title-text"] as Style;
                 titleText.Text = a.Node.Title;
                 achievementContainer.Children.Add(titleText);
-                foreach (AchievementTree.AchievementNode d in a.DependsOn)
+                foreach (AchievementNodeViewModel d in a.DependsOn)
                 {
                     Line depArrow = new Line();
                     depArrow.Style = Resources["achievement-dependency-line"] as Style;
@@ -150,6 +150,11 @@ namespace Achievr
         private void Achievement_Click(object sender, PointerRoutedEventArgs e)
         {
             int indexOfAchievement = mainCanvas.Children.IndexOf((StackPanel)sender);
+            for (int i = indexOfAchievement; i >= 0; i--)
+            {   // a hack to avoid counting dependency lines towards index
+                if (mainCanvas.Children[i].GetType() != typeof(StackPanel))
+                    indexOfAchievement--;
+            }
             ActiveTreeViewModel.Active.SelectedIndex = indexOfAchievement;
             bool? editingEnabled = editButton.IsChecked;
             if (!editingEnabled.HasValue)
@@ -165,7 +170,6 @@ namespace Achievr
                 ActiveTreeViewModel.Active.ToggleAchieved();
                 DrawAchievementTreeOnCanvas();
             }
-
             System.Diagnostics.Debug.WriteLine("Clicked on child " + indexOfAchievement);
             e.Handled = true;
         }
@@ -176,6 +180,7 @@ namespace Achievr
                 = ActiveTreeViewModel.Active.ScoreValue;
             ActiveTreeViewModel.Active.SetScoreValue();
             EditAchievementMenu.Hide();
+            DrawAchievementTreeOnCanvas();
         }
 
         private void EditAchievementDeleteButton_Click(object sender, RoutedEventArgs e)

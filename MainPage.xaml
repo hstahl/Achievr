@@ -111,6 +111,65 @@
                     InputScope="Digits"
                     Text="{x:Bind ActiveTreeViewModel.Active.ScoreValue, Mode=TwoWay, FallbackValue=10}"/>
                 <StackPanel
+                    Margin="10,10,0,0"
+                    BorderBrush="DarkGray"
+                    BorderThickness="2">
+                    <TextBlock
+                        Text="Dependent on:"/>
+                    <ListView
+                        x:Name="AchievementDependencyList"
+                        ItemsSource="{x:Bind ActiveTreeViewModel.Active.SelectedNode.DependsOn, Mode=OneWay}"
+                        SelectedIndex="{x:Bind ActiveTreeViewModel.Active.SelectedNode.SelectedDependencyIndex, Mode=TwoWay}">
+                        <ListView.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <StackPanel
+                                    Margin="5,5,5,0"/>
+                            </ItemsPanelTemplate>
+                        </ListView.ItemsPanel>
+                        <ListView.ItemContainerStyle>
+                            <Style TargetType="ListViewItem">
+                                <Setter Property="MinHeight" Value="18"/>
+                            </Style>
+                        </ListView.ItemContainerStyle>
+                        <ListView.ItemTemplate>
+                            <DataTemplate x:DataType="data:AchievementNodeViewModel">
+                                <TextBlock
+                                    Text="{x:Bind Node.Title}"/>
+                            </DataTemplate>
+                        </ListView.ItemTemplate>
+                    </ListView>
+                    <Button
+                        Content="Remove"
+                        Click="{x:Bind ActiveTreeViewModel.Active.SelectedNode.DeleteDependency}"/>
+                    <TextBlock
+                        Text="Does not depend on:"/>
+                    <ListView
+                        x:Name="AchievementAddableDependenciesList"
+                        ItemsSource="{x:Bind ActiveTreeViewModel.Active.SelectedNode.AvailableDependencies, Mode=OneWay}"
+                        SelectedIndex="{x:Bind ActiveTreeViewModel.Active.SelectedNode.SelectedAvailableDependencyIndex, Mode=TwoWay}">
+                        <ListView.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <StackPanel
+                                    Margin="5,5,5,0"/>
+                            </ItemsPanelTemplate>
+                        </ListView.ItemsPanel>
+                        <ListView.ItemContainerStyle>
+                            <Style TargetType="ListViewItem">
+                                <Setter Property="MinHeight" Value="18"/>
+                            </Style>
+                        </ListView.ItemContainerStyle>
+                        <ListView.ItemTemplate>
+                            <DataTemplate x:DataType="data:AchievementNodeViewModel">
+                                <TextBlock
+                                    Text="{x:Bind Node.Title}"/>
+                            </DataTemplate>
+                        </ListView.ItemTemplate>
+                    </ListView>
+                    <Button
+                        Content="Add"
+                        Click="{x:Bind ActiveTreeViewModel.Active.SelectedNode.AddDependency}"/>
+                </StackPanel>
+                <StackPanel
                     Orientation="Horizontal">
                     <Button
                         x:Name="EditAchievementDoneButton"
@@ -123,7 +182,7 @@
                         Margin="5,5,5,5"
                         Click="EditAchievementDeleteButton_Click"/>
                 </StackPanel>
-             </StackPanel>
+            </StackPanel>
         </Flyout>
     </Page.Resources>
     <SplitView
