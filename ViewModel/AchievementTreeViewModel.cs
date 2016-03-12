@@ -1,5 +1,6 @@
 ﻿using Achievr.Model;
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 
@@ -7,7 +8,10 @@ namespace Achievr.ViewModel
 {
     public class AchievementTreeViewModel : NotificationBase<AchievementTree>
     {
-        public AchievementTreeViewModel(AchievementTree tree = null) : base(tree) { }
+        public AchievementTreeViewModel(AchievementTree tree = null) : base(tree)
+        {
+            this.ScoreValue = 10;
+        }
 
         public string Name
         {
@@ -61,6 +65,7 @@ namespace Achievr.ViewModel
             node.Node = new Achievement(Title, Description, ScoreValue);
             node.Node.Unlocked = Unlocked;
             node.Coordinates = new Tuple<int, int>(X, Y);
+            node.DependsOn = new List<AchievementTree.AchievementNode>();
             Nodes.Add(node);
             SelectedIndex = Nodes.IndexOf(node);
         }
@@ -75,7 +80,7 @@ namespace Achievr.ViewModel
             }
         }
 
-        void AchievementNode_OnNotifyPropertyAdded(Object sender, PropertyChangedEventArgs e)
+        void AchievementNode_OnNotifyPropertyAdded(object sender, PropertyChangedEventArgs e)
         {
             This.UpdateAdd((AchievementNodeViewModel)sender);
         }

@@ -8,6 +8,7 @@ using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
+using Windows.UI.Input;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
@@ -32,23 +33,13 @@ namespace Achievr
         public MainPage()
         {
             InitializeComponent();
+
             var localSettings = Windows.Storage.ApplicationData.Current.LocalSettings;
             AchievementTree activeTree = (AchievementTree)localSettings.Values["activeTree"];
             ICollection<AchievementTree>savedTrees = (List<AchievementTree>)localSettings.Values["savedTrees"];
-            if (savedTrees == null)
-                savedTrees = new List<AchievementTree>();
-            if (activeTree != null)
-                titleText.Text = activeTree.ToString();
 
             this.SavedTreesViewModel = new SavedTreesViewModel();
             this.ActiveTreeViewModel = new ActiveAchievementTreeViewModel();
-
-            AchievementTree testTree = new AchievementTree("Test Tree");
-            Achievement testAchievement = new Achievement("Test", "Just a test!");
-            testAchievement.ToggleUnlocked();
-            testTree.AddNode(testAchievement, 50, 20);
-            Achievement depAchievement = new Achievement("Deps", "Dep Test");
-            testTree.AddNode(depAchievement, 200, 200, testTree.Nodes.First());
 
             DrawAchievementTreeOnCanvas();
         }
@@ -56,7 +47,7 @@ namespace Achievr
         private void DrawAchievementTreeOnCanvas()
         {
             mainCanvas.Children.Clear();
-            if (ActiveTreeViewModel.Active == null)
+            if (!ActiveTreeViewModel.HasTreeLoaded)
                 return;
             foreach (AchievementTree.AchievementNode a in this.ActiveTreeViewModel.Active.Nodes)
             {
@@ -119,6 +110,38 @@ namespace Achievr
         {
             mainSplitView.IsPaneOpen = false;
             UpdateActiveTree();
+        }
+
+        private void mainCanvas_PointerPressed(object sender, PointerRoutedEventArgs e)
+        {
+            if (!ActiveTreeViewModel.HasTreeLoaded)
+                return;
+            bool? editingEnabled = editButton.IsChecked;
+            if (!editingEnabled.HasValue)
+                editingEnabled = false;
+            if ((bool)editingEnabled)
+            {
+                PointerPoint ptrPt = e.GetCurrentPoint(mainCanvas);
+                double x, y;
+                x = ptrPt.Position.X;
+                y = ptrPt.Position.Y;
+                ActiveTreeViewModel.Active.X = (int)x;
+                ActiveTreeViewModel.Active.Y = (int)y;
+                ActiveTreeViewModel.Active.Unlocked = false;
+                NewAchievementMenu.ShowAt(this);
+            }
+        }
+
+        private void NewAchievementMenuDoneButton_Click(object sender, RoutedEventArgs e)
+        {
+            NewAchievementMenu.Hide();
+            ActiveTreeViewModel.Active.AddNode();
+            // Back to defaults but not in a pretty way
+            ActiveTreeViewModel.Active.Title = null;
+            ActiveTreeViewModel.Active.Description = null;
+            ActiveTreeViewModel.Active.ScoreValue = 10;
+            // Update canvas
+            DrawAchievementTreeOnCanvas();
         }
     }
 }
