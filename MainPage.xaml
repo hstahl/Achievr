@@ -163,7 +163,7 @@
                                         HorizontalAlignment="Center"
                                         VerticalAlignment="Center"
                                         TextAlignment="Center"
-                                        Text="{x:Bind Score}"/>
+                                        Text="{x:Bind Score, Mode=OneWay}"/>
                                 </Canvas>
                                 <TextBlock
                                     Text="{x:Bind Name}"

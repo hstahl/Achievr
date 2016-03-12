@@ -19,9 +19,11 @@ namespace Achievr.ViewModel
             set { SetProperty(This.Name, value, () => This.Name = value); }
         }
 
+        private string _Score = "";
         public string Score
         {
-            get { return This.Score; }
+            get { return _Score; }
+            set { SetProperty(ref _Score, value); }
         }
 
         private ObservableCollection<AchievementNodeViewModel> _Nodes
@@ -67,6 +69,7 @@ namespace Achievr.ViewModel
             node.Coordinates = new Tuple<int, int>(X, Y);
             node.DependsOn = new List<AchievementTree.AchievementNode>();
             Nodes.Add(node);
+            Score = This.Score;
             SelectedIndex = Nodes.IndexOf(node);
         }
 
