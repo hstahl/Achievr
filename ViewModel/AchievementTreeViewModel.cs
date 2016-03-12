@@ -52,10 +52,26 @@ namespace Achievr.ViewModel
             get { return (_SelectedIndex >= 0) ? _Nodes[_SelectedIndex] : null; }
         }
 
-        public string Title { get; set; }
-        public string Description { get; set; }
-        public bool Unlocked { get; set; }
-        public int ScoreValue { get; set; }
+        // Values for creating new nodes. These fields work as content for new
+        // achievement and edit achievement menus.
+        private string _Title;
+        public string Title
+        {
+            get { return _Title; }
+            set { SetProperty(ref _Title, value); }
+        }
+        private string _Description;
+        public string Description
+        {
+            get { return _Description; }
+            set { SetProperty(ref _Description, value); }
+        }
+        private int _ScoreValue = 10;
+        public int ScoreValue
+        {
+            get { return _ScoreValue; }
+            set { SetProperty(ref _ScoreValue, value); }
+        }
         public int X { get; set; }
         public int Y { get; set; }
         public AchievementNodeViewModel Dependency { get; set; }
@@ -65,7 +81,7 @@ namespace Achievr.ViewModel
             var node = new AchievementNodeViewModel();
             node.PropertyChanged += AchievementNode_OnNotifyPropertyAdded;
             node.Node = new Achievement(Title, Description, ScoreValue);
-            node.Node.Unlocked = Unlocked;
+            node.Node.Unlocked = false;
             node.Coordinates = new Tuple<int, int>(X, Y);
             node.DependsOn = new List<AchievementTree.AchievementNode>();
             Nodes.Add(node);
@@ -80,6 +96,27 @@ namespace Achievr.ViewModel
                 var node = Nodes[SelectedIndex];
                 Nodes.RemoveAt(SelectedIndex);
                 This.DeleteNode(node);
+                Score = This.Score;
+            }
+        }
+
+        public void ToggleAchieved()
+        {
+            if (SelectedIndex >= 0)
+            {
+                Nodes[SelectedIndex].Node.Unlocked =
+                    !Nodes[SelectedIndex].Node.Unlocked;
+                Score = This.Score;
+            }
+        }
+
+        // Use this to set score values or the UI won't be updated.
+        public void SetScoreValue()
+        {
+            if (SelectedIndex >= 0)
+            {
+                Nodes[SelectedIndex].Node.ScoreValue = ScoreValue;
+                Score = This.Score;
             }
         }
 

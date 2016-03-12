@@ -86,8 +86,44 @@
                 <Button
                     x:Name="NewAchievementMenuDoneButton"
                     Content="Done"
+                    Margin="5,5,5,5"
                     Click="NewAchievementMenuDoneButton_Click"/>
             </StackPanel>
+        </Flyout>
+        <Flyout
+            x:Key="EditAchievementMenu"
+            x:Name="EditAchievementMenu"
+            Placement="Top">
+            <StackPanel>
+                <TextBlock
+                    Text="Edit achievement"
+                    FontSize="24"/>
+                <TextBox
+                    Header="Title"
+                    MaxLength="20"
+                    Text="{x:Bind ActiveTreeViewModel.Active.SelectedNode.Node.Title, Mode=TwoWay, FallbackValue=''}"/>
+                <TextBox
+                    Header="Description"
+                    MaxLength="300"
+                    Text="{x:Bind ActiveTreeViewModel.Active.SelectedNode.Node.Description, Mode=TwoWay, FallbackValue=''}"/>
+                <TextBox
+                    Header="Score Value"
+                    InputScope="Digits"
+                    Text="{x:Bind ActiveTreeViewModel.Active.ScoreValue, Mode=TwoWay, FallbackValue=10}"/>
+                <StackPanel
+                    Orientation="Horizontal">
+                    <Button
+                        x:Name="EditAchievementDoneButton"
+                        Content="Done"
+                        Margin="5,5,5,5"
+                        Click="EditAchievementDoneButton_Click"/>
+                    <Button
+                        x:Name="EditAchievementDeleteButton"
+                        Content="Delete"
+                        Margin="5,5,5,5"
+                        Click="EditAchievementDeleteButton_Click"/>
+                </StackPanel>
+             </StackPanel>
         </Flyout>
     </Page.Resources>
     <SplitView

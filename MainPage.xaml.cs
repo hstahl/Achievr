@@ -53,6 +53,7 @@ namespace Achievr
             {
                 StackPanel achievementContainer = new StackPanel();
                 achievementContainer.Style = Resources["achievement-container-style"] as Style;
+                achievementContainer.PointerPressed += Achievement_Click;
                 Canvas.SetLeft(achievementContainer, a.Coordinates.Item1);
                 Canvas.SetTop(achievementContainer, a.Coordinates.Item2);
                 mainCanvas.Children.Add(achievementContainer);
@@ -127,7 +128,9 @@ namespace Achievr
                 y = ptrPt.Position.Y;
                 ActiveTreeViewModel.Active.X = (int)x;
                 ActiveTreeViewModel.Active.Y = (int)y;
-                ActiveTreeViewModel.Active.Unlocked = false;
+                ActiveTreeViewModel.Active.Title = null;
+                ActiveTreeViewModel.Active.Description = null;
+                ActiveTreeViewModel.Active.ScoreValue = 10;
                 NewAchievementMenu.ShowAt(this);
             }
         }
@@ -141,6 +144,44 @@ namespace Achievr
             ActiveTreeViewModel.Active.Description = null;
             ActiveTreeViewModel.Active.ScoreValue = 10;
             // Update canvas
+            DrawAchievementTreeOnCanvas();
+        }
+
+        private void Achievement_Click(object sender, PointerRoutedEventArgs e)
+        {
+            int indexOfAchievement = mainCanvas.Children.IndexOf((StackPanel)sender);
+            ActiveTreeViewModel.Active.SelectedIndex = indexOfAchievement;
+            bool? editingEnabled = editButton.IsChecked;
+            if (!editingEnabled.HasValue)
+                editingEnabled = false;
+            if ((bool)editingEnabled)
+            {
+                ActiveTreeViewModel.Active.ScoreValue
+                    = ActiveTreeViewModel.Active.SelectedNode.Node.ScoreValue;
+                EditAchievementMenu.ShowAt(this);
+            }
+            else
+            {
+                ActiveTreeViewModel.Active.ToggleAchieved();
+                DrawAchievementTreeOnCanvas();
+            }
+
+            System.Diagnostics.Debug.WriteLine("Clicked on child " + indexOfAchievement);
+            e.Handled = true;
+        }
+
+        private void EditAchievementDoneButton_Click(object sender, RoutedEventArgs e)
+        {
+            ActiveTreeViewModel.Active.SelectedNode.Node.ScoreValue
+                = ActiveTreeViewModel.Active.ScoreValue;
+            ActiveTreeViewModel.Active.SetScoreValue();
+            EditAchievementMenu.Hide();
+        }
+
+        private void EditAchievementDeleteButton_Click(object sender, RoutedEventArgs e)
+        {
+            EditAchievementMenu.Hide();
+            ActiveTreeViewModel.Active.DeleteNode();
             DrawAchievementTreeOnCanvas();
         }
     }
