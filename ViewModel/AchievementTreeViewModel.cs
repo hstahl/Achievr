@@ -99,10 +99,36 @@ namespace Achievr.ViewModel
             }
         }
 
+        // Toggle Unlocked state iff node has no unlocked dependencies.
+        // Toggle all unlocked dependent nodes if this node is toggled to locked
         public void ToggleAchieved()
         {
             if (SelectedIndex >= 0)
             {
+                if (Nodes[SelectedIndex].Node.Unlocked)
+                {
+                    for (int i = 0; i < Nodes.Count; i++)
+                    {
+                        if (Nodes[i].DependsOn.Contains(Nodes[SelectedIndex]))
+                        {
+                            if (Nodes[i].Node.Unlocked)
+                            {
+                                int temp = SelectedIndex;
+                                SelectedIndex = i;
+                                ToggleAchieved();
+                                SelectedIndex = temp;
+                            }
+                        }
+                    }
+                }
+                else
+                {
+                    foreach (var dependency in Nodes[SelectedIndex].DependsOn)
+                    {
+                        if (!dependency.Node.Unlocked)
+                            return;
+                    }
+                }
                 Nodes[SelectedIndex].Node.Unlocked =
                     !Nodes[SelectedIndex].Node.Unlocked;
                 Score = This.Score;
