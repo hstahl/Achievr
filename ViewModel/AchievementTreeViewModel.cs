@@ -77,7 +77,7 @@ namespace Achievr.ViewModel
         public void AddNode()
         {
             var node = new AchievementNodeViewModel();
-            node.PropertyChanged += AchievementTree_OnNotifyPropertyAdded;
+            This.UpdateAdd(node);
             node.Node = new Achievement(Title, Description, ScoreValue);
             node.Node.Unlocked = false;
             node.Coordinates = new Tuple<int, int>(X, Y);
@@ -162,11 +162,6 @@ namespace Achievr.ViewModel
                 }
                 Nodes[i].AvailableDependencies = depList;
             }
-        }
-
-        void AchievementTree_OnNotifyPropertyAdded(object sender, PropertyChangedEventArgs e)
-        {
-            This.UpdateAdd((AchievementNodeViewModel)sender);
         }
     }
 }
