@@ -70,20 +70,26 @@ namespace Achievr.ViewModel
 
         public void AddDependency()
         {
-            var dependency = SelectedAvailableDependency;
-            This.UpdateAddDependency(dependency);
-            DependsOn.Add(dependency);
-            SelectedDependencyIndex = DependsOn.IndexOf(dependency);
-            AvailableDependencies.Remove(dependency);
+            if (SelectedDependencyIndex >= 0)
+            {
+                var dependency = SelectedAvailableDependency;
+                This.UpdateAddDependency(dependency);
+                DependsOn.Add(dependency);
+                SelectedDependencyIndex = DependsOn.IndexOf(dependency);
+                AvailableDependencies.Remove(dependency);
+            }
         }
 
         public void DeleteDependency()
         {
-            var dependency = SelectedDependency;
-            This.UpdateDeleteDependency(dependency);
-            AvailableDependencies.Add(dependency);
-            SelectedAvailableDependencyIndex = AvailableDependencies.IndexOf(dependency);
-            DependsOn.Remove(dependency);
+            if (SelectedAvailableDependencyIndex >= 0)
+            {
+                var dependency = SelectedDependency;
+                This.UpdateDeleteDependency(dependency);
+                AvailableDependencies.Add(dependency);
+                SelectedAvailableDependencyIndex = AvailableDependencies.IndexOf(dependency);
+                DependsOn.Remove(dependency);
+            }
         }
 
         public Tuple<int, int> Coordinates
