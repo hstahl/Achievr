@@ -182,6 +182,9 @@ namespace Achievr.ViewModel
                             var availableNode = vm.SelectedTree.SelectedNode.AvailableDependencies.IndexOf(depNode);
                             vm.SelectedTree.SelectedNode.SelectedAvailableDependencyIndex = availableNode;
                             vm.SelectedTree.SelectedNode.AddDependency();
+                            // Need to decrement here since the list view does it for us normally
+                            // as the observable collection is updated.
+                            vm.SelectedTree.SelectedNode.SelectedAvailableDependencyIndex--;
                         }
                     }
                 }
