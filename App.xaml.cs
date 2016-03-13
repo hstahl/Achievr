@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Achievr.ViewModel;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -22,6 +23,8 @@ namespace Achievr
     /// </summary>
     sealed partial class App : Application
     {
+        public SavedTreesViewModel Saved { get; set; }
+
         /// <summary>
         /// Initializes the singleton application object.  This is the first line of authored code
         /// executed, and as such is the logical equivalent of main() or WinMain().
@@ -102,6 +105,9 @@ namespace Achievr
         {
             var deferral = e.SuspendingOperation.GetDeferral();
             //TODO: Save application state and stop any background activity
+            var serialized = Saved.Serialize();
+            var localSettings = Windows.Storage.ApplicationData.Current.LocalSettings;
+            localSettings.Values["Saved"] = serialized;
             deferral.Complete();
         }
     }

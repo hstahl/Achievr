@@ -35,11 +35,14 @@ namespace Achievr
             InitializeComponent();
 
             var localSettings = Windows.Storage.ApplicationData.Current.LocalSettings;
-            AchievementTree activeTree = (AchievementTree)localSettings.Values["activeTree"];
-            ICollection<AchievementTree>savedTrees = (List<AchievementTree>)localSettings.Values["savedTrees"];
-
-            this.SavedTreesViewModel = new SavedTreesViewModel();
+            var saved = localSettings.Values["Saved"] as string;
+            if (saved != null)
+                this.SavedTreesViewModel = SavedTreesViewModel.Deserialize(saved);
+            else
+                this.SavedTreesViewModel = new SavedTreesViewModel();
             this.ActiveTreeViewModel = new ActiveAchievementTreeViewModel();
+            var app = App.Current as App;
+            app.Saved = SavedTreesViewModel;
 
             DrawAchievementTreeOnCanvas();
         }
