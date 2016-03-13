@@ -173,7 +173,6 @@ namespace Achievr
                 ActiveTreeViewModel.Active.ToggleAchieved();
                 DrawAchievementTreeOnCanvas();
             }
-            System.Diagnostics.Debug.WriteLine("Clicked on child " + indexOfAchievement);
             e.Handled = true;
         }
 
