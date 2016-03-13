@@ -1,5 +1,4 @@
-﻿using System;
-using System.Reflection;
+﻿using System.Reflection;
 
 namespace Achievr.Model
 {
@@ -47,34 +46,6 @@ namespace Achievr.Model
         public override string ToString()
         {
             return Title + " (" + ScoreValue + " p)";
-        }
-    }
-
-    public class DueAchievement : Achievement
-    {
-        public DateTime DueTime { get; }
-
-        public DueAchievement(string title, string description, int score_value, DateTime dueTime)
-            : base(title, description, score_value)
-        {
-            this.DueTime = dueTime;
-        }
-
-        public override bool Equals(object obj)
-        {
-            if (obj.GetType().IsAssignableFrom(this.GetType()))
-            {
-                DueAchievement other = (DueAchievement)obj;
-                return this.DueTime.Equals(other.DueTime) &&
-                       base.Equals(obj);
-            }
-            return false;
-        }
-
-        public override int GetHashCode()
-        {
-            return DueTime.GetHashCode() +
-                   base.GetHashCode();
         }
     }
 }

@@ -1,7 +1,6 @@
 ﻿using Achievr.Model;
 using System;
 using System.Collections.ObjectModel;
-using System.ComponentModel;
 
 namespace Achievr.ViewModel
 {
@@ -70,7 +69,7 @@ namespace Achievr.ViewModel
 
         public void AddDependency()
         {
-            if (SelectedDependencyIndex >= 0)
+            if (SelectedAvailableDependencyIndex >= 0)
             {
                 var dependency = SelectedAvailableDependency;
                 This.UpdateAddDependency(dependency);
@@ -82,7 +81,7 @@ namespace Achievr.ViewModel
 
         public void DeleteDependency()
         {
-            if (SelectedAvailableDependencyIndex >= 0)
+            if (SelectedDependencyIndex >= 0)
             {
                 var dependency = SelectedDependency;
                 This.UpdateDeleteDependency(dependency);

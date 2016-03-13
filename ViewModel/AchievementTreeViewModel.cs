@@ -1,7 +1,6 @@
 ﻿using Achievr.Model;
 using System;
 using System.Collections.ObjectModel;
-using System.ComponentModel;
 
 namespace Achievr.ViewModel
 {

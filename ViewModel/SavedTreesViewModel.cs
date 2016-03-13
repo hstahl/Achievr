@@ -1,9 +1,7 @@
 ﻿using Achievr.Model;
 using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.IO;
 using System.Xml;
 
 namespace Achievr.ViewModel

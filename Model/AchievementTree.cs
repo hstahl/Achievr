@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Achievr.Model
 {
@@ -79,16 +76,6 @@ namespace Achievr.Model
         public void DeleteNode(AchievementNode node)
         {
             Nodes.Remove(node);
-        }
-
-        public static void AddNodeDepedency(AchievementNode node, AchievementNode dependency)
-        {
-            node.DependsOn.Add(dependency);
-        }
-
-        public static void RemoveNodeDependency(AchievementNode node, AchievementNode dependency)
-        {
-            node.DependsOn.Remove(dependency);
         }
 
         public override string ToString()
