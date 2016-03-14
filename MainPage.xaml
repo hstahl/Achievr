@@ -9,83 +9,109 @@
     mc:Ignorable="d">
 
     <Page.Resources>
-        <Style x:Key="achievement-container-style" TargetType="StackPanel">
-            <Setter Property="Orientation" Value="Horizontal"/>
-            <Setter Property="Height" Value="50"/>
-            <Setter Property="Width" Value="150"/>
-            <Setter Property="Background" Value="LightGray"/>
+        <SolidColorBrush x:Key="achievement-unlocked-color" Color="#FFF5E752"/>
+        <SolidColorBrush x:Key="achievement-locked-color" Color="#FF7097A0"/>
+        <SolidColorBrush x:Key="flyout-background-brush" Color="#FF105868"/>
+        <Style x:Key="flyout-presenter-style" TargetType="FlyoutPresenter">
+            <Setter Property="Padding" Value="0"/>
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="BorderThickness" Value="0"/>
         </Style>
-        <Style x:Key="achievement-icon-locked" TargetType="Image">
-            <Setter Property="Source" Value="Assets/hollow-star-icon-50x50.png"/>
-            <Setter Property="Width" Value="Auto"/>
+        <Style x:Key="alt-achievement-container-style" TargetType="Grid">
+            <Setter Property="Height" Value="80"/>
+            <Setter Property="Width" Value="80"/>
+            <Setter Property="Canvas.ZIndex" Value="10"/>
         </Style>
-        <Style x:Key="achievement-icon-unlocked" TargetType="Image">
-            <Setter Property="Source" Value="Assets/filled-star-icon-50x50.png"/>
-            <Setter Property="Width" Value="Auto"/>
+        <Style x:Key="achievement-score-text" TargetType="TextBlock">
+            <Setter Property="Margin" Value="0,2,2,0"/>
+            <Setter Property="Grid.Row" Value="0"/>
+            <Setter Property="HorizontalAlignment" Value="Right"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="FontSize" Value="12"/>
+            <Setter Property="Foreground" Value="White"/>
         </Style>
         <Style x:Key="achievement-title-text" TargetType="TextBlock">
+            <Setter Property="Margin" Value="2,0,2,0"/>
+            <Setter Property="Grid.Row" Value="1"/>
+            <Setter Property="TextAlignment" Value="Center"/>
+            <Setter Property="HorizontalAlignment" Value="Center"/>
             <Setter Property="VerticalAlignment" Value="Center"/>
-            <Setter Property="Text" Value="Hello achievement"/>
             <Setter Property="TextWrapping" Value="Wrap"/>
-            <Setter Property="Width" Value="100"/>
+            <Setter Property="FontSize" Value="11"/>
+            <Setter Property="Foreground" Value="Black"/>
         </Style>
         <Style x:Key="achievement-dependency-line" TargetType="Line">
-            <Setter Property="Stroke">
-                <Setter.Value>
-                    <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
-                        <GradientStop Color="Red" Offset="0.25"/>
-                        <GradientStop Color="Gray" Offset="0.75"/>
-                    </LinearGradientBrush>
-                </Setter.Value>
-            </Setter>
-            <Setter Property="StrokeThickness" Value="8"/>
-            <Setter Property="StrokeStartLineCap" Value="Triangle"/>
-            <Setter Property="StrokeEndLineCap" Value="Round"/>
+            <Setter Property="StrokeThickness" Value="4"/>
         </Style>
-        <StackPanel x:Key="achievement-container"
-            Style="{StaticResource achievement-container-style}">
-            <Image Style="{StaticResource achievement-icon-locked}"/>
-            <TextBlock Style="{StaticResource achievement-title-text}"/>
-        </StackPanel>
         <Flyout x:Key="NewAchievementTreeNameDialog"
-                x:Name="NewAchievementTreeNameDialog">
-            <StackPanel>
+                x:Name="NewAchievementTreeNameDialog"
+                FlyoutPresenterStyle="{StaticResource flyout-presenter-style}">
+            <StackPanel
+                Background="{StaticResource flyout-background-brush}"
+                Padding="5">
                 <TextBox
                     x:Name="NewAchievementNameBox"
                     Width="300"
-                    Header="Name your tree"
                     PlaceholderText="Enter name..."
-                    MaxLength="20"/>
+                    MaxLength="20">
+                    <TextBox.HeaderTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="Name your tree" Foreground="White"/>
+                        </DataTemplate>
+                    </TextBox.HeaderTemplate>
+                </TextBox>
                 <Button
                     x:Name="NewAchievementCreateButton"
                     Content="Create"
+                    Foreground="White"
+                    Margin="0,5,0,0"
                     Click="NewAchievementCreateButton_Click"/>
             </StackPanel>
         </Flyout>
         <Flyout x:Key="NewAchievementMenu"
                 x:Name="NewAchievementMenu"
-                Placement="Top">
-            <StackPanel>
+                Placement="Top"
+                FlyoutPresenterStyle="{StaticResource flyout-presenter-style}">
+            <StackPanel
+                Background="{StaticResource flyout-background-brush}"
+                Padding="5">
                 <TextBlock
                     Text="Create a new achievement"
+                    Foreground="White"
                     FontSize="24"/>
                 <TextBox
-                    Header="Title"
                     PlaceholderText="Enter title..."
-                    MaxLength="20"
-                    Text="{x:Bind ActiveTreeViewModel.Active.Title, Mode=TwoWay, FallbackValue=''}"/>
+                    MaxLength="40"
+                    Text="{x:Bind ActiveTreeViewModel.Active.Title, Mode=TwoWay, FallbackValue=''}">
+                    <TextBox.HeaderTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="Title" Foreground="White"/>
+                        </DataTemplate>
+                    </TextBox.HeaderTemplate>
+                </TextBox>
                 <TextBox
-                    Header="Description"
                     PlaceholderText="Enter description..."
                     MaxLength="300"
-                    Text="{x:Bind ActiveTreeViewModel.Active.Description, Mode=TwoWay, FallbackValue=''}"/>
+                    Text="{x:Bind ActiveTreeViewModel.Active.Description, Mode=TwoWay, FallbackValue=''}">
+                    <TextBox.HeaderTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="Description" Foreground="White"/>
+                        </DataTemplate>
+                    </TextBox.HeaderTemplate>
+                </TextBox>
                 <TextBox
-                    Header="Score Value"
                     InputScope="Digits"
-                    Text="{x:Bind ActiveTreeViewModel.Active.ScoreValue, Mode=TwoWay, FallbackValue=10}"/>
+                    Text="{x:Bind ActiveTreeViewModel.Active.ScoreValue, Mode=TwoWay, FallbackValue=10}">
+                    <TextBox.HeaderTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="Score value" Foreground="White"/>
+                        </DataTemplate>
+                    </TextBox.HeaderTemplate>
+                </TextBox>
                 <Button
                     x:Name="NewAchievementMenuDoneButton"
                     Content="Done"
+                    Foreground="White"
                     Margin="5,5,5,5"
                     Click="NewAchievementMenuDoneButton_Click"/>
             </StackPanel>
@@ -93,29 +119,52 @@
         <Flyout
             x:Key="EditAchievementMenu"
             x:Name="EditAchievementMenu"
-            Placement="Top">
-            <StackPanel>
+            Placement="Top"
+            FlyoutPresenterStyle="{StaticResource flyout-presenter-style}">
+            <StackPanel
+                Padding="5"
+                Background="{StaticResource flyout-background-brush}">
                 <TextBlock
                     Text="Edit achievement"
+                    Foreground="White"
                     FontSize="24"/>
                 <TextBox
-                    Header="Title"
-                    MaxLength="20"
-                    Text="{x:Bind ActiveTreeViewModel.Active.SelectedNode.Node.Title, Mode=TwoWay, FallbackValue=''}"/>
+                    MaxLength="40"
+                    Text="{x:Bind ActiveTreeViewModel.Active.SelectedNode.Node.Title, Mode=TwoWay, FallbackValue=''}">
+                    <TextBox.HeaderTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="Title" Foreground="White"/>
+                        </DataTemplate>
+                    </TextBox.HeaderTemplate>
+                </TextBox>
                 <TextBox
-                    Header="Description"
                     MaxLength="300"
-                    Text="{x:Bind ActiveTreeViewModel.Active.SelectedNode.Node.Description, Mode=TwoWay, FallbackValue=''}"/>
+                    Text="{x:Bind ActiveTreeViewModel.Active.SelectedNode.Node.Description, Mode=TwoWay, FallbackValue=''}">
+                    <TextBox.HeaderTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="Description" Foreground="White"/>
+                        </DataTemplate>
+                    </TextBox.HeaderTemplate>
+                </TextBox>
                 <TextBox
-                    Header="Score Value"
                     InputScope="Digits"
-                    Text="{x:Bind ActiveTreeViewModel.Active.ScoreValue, Mode=TwoWay, FallbackValue=10}"/>
+                    Text="{x:Bind ActiveTreeViewModel.Active.ScoreValue, Mode=TwoWay, FallbackValue=10}">
+                    <TextBox.HeaderTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="Score value" Foreground="White"/>
+                        </DataTemplate>
+                    </TextBox.HeaderTemplate>
+                </TextBox>
                 <StackPanel
-                    Margin="10,10,0,0"
-                    BorderBrush="DarkGray"
+                    Margin="10,10,10,0"
                     BorderThickness="2">
+                    <StackPanel.BorderBrush>
+                        <SolidColorBrush Color="Black" Opacity="0.2"/>
+                    </StackPanel.BorderBrush>
                     <TextBlock
-                        Text="Dependent on:"/>
+                        Text="Dependent on:"
+                        Margin="5,0,0,0"
+                        Foreground="White"/>
                     <ListView
                         x:Name="AchievementDependencyList"
                         ItemsSource="{x:Bind ActiveTreeViewModel.Active.SelectedNode.DependsOn, Mode=OneWay}"
@@ -134,15 +183,20 @@
                         <ListView.ItemTemplate>
                             <DataTemplate x:DataType="data:AchievementNodeViewModel">
                                 <TextBlock
-                                    Text="{x:Bind Node.Title}"/>
+                                    Text="{x:Bind Node.Title}"
+                                    Foreground="White"/>
                             </DataTemplate>
                         </ListView.ItemTemplate>
                     </ListView>
                     <Button
                         Content="Remove"
+                        Foreground="White"
+                        Margin="5,5,0,5"
                         Click="{x:Bind ActiveTreeViewModel.Active.SelectedNode.DeleteDependency}"/>
                     <TextBlock
-                        Text="Does not depend on:"/>
+                        Text="Does not depend on:"
+                        Foreground="White"
+                        Margin="5,0,0,0"/>
                     <ListView
                         x:Name="AchievementAddableDependenciesList"
                         ItemsSource="{x:Bind ActiveTreeViewModel.Active.SelectedNode.AvailableDependencies, Mode=OneWay}"
@@ -161,12 +215,15 @@
                         <ListView.ItemTemplate>
                             <DataTemplate x:DataType="data:AchievementNodeViewModel">
                                 <TextBlock
-                                    Text="{x:Bind Node.Title}"/>
+                                    Text="{x:Bind Node.Title}"
+                                    Foreground="White"/>
                             </DataTemplate>
                         </ListView.ItemTemplate>
                     </ListView>
                     <Button
                         Content="Add"
+                        Margin="5"
+                        Foreground="White"
                         Click="{x:Bind ActiveTreeViewModel.Active.SelectedNode.AddDependency}"/>
                 </StackPanel>
                 <StackPanel
@@ -174,26 +231,42 @@
                     <Button
                         x:Name="EditAchievementDoneButton"
                         Content="Done"
-                        Margin="5,5,5,5"
+                        Foreground="White"
+                        Margin="5,5,0,5"
                         Click="EditAchievementDoneButton_Click"/>
                     <Button
                         x:Name="EditAchievementDeleteButton"
                         Content="Delete"
-                        Margin="5,5,5,5"
+                        Foreground="White"
+                        Margin="5,5,0,5"
                         Click="EditAchievementDeleteButton_Click"/>
                 </StackPanel>
             </StackPanel>
         </Flyout>
     </Page.Resources>
     <SplitView
-        Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
         x:Name="mainSplitView"
         DisplayMode="Overlay"
         IsPaneOpen="False"
         OpenPaneLength="300"
         CompactPaneLength="48">
+        <SplitView.Background>
+            <LinearGradientBrush
+                StartPoint="0,0.5"
+                EndPoint="1,0.5">
+                <GradientStop Offset="0" Color="#FF042038"/>
+                <GradientStop Offset="0.5" Color="#FF0E4E5D"/>
+                <GradientStop Offset="1" Color="#FF042038"/>
+            </LinearGradientBrush>
+        </SplitView.Background>
         <SplitView.Pane>
-            <StackPanel Background="Gray">
+            <StackPanel>
+                <StackPanel.Background>
+                    <LinearGradientBrush EndPoint="0,0.5" StartPoint="1,0.5">
+                        <GradientStop Color="#FF105868" Offset="0"/>
+                        <GradientStop Color="#FF084E5D" Offset="1"/>
+                    </LinearGradientBrush>
+                </StackPanel.Background>
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="Auto"/>
@@ -214,7 +287,7 @@
                         Grid.Column="1"
                         Text="Saved achievement trees"
                         FontSize="18"
-                        Foreground="LightGray"
+                        Foreground="White"
                         VerticalAlignment="Center"
                         Width="Auto"/>
                     <Button
@@ -248,7 +321,7 @@
                                     <Ellipse
                                         Canvas.Left="0"
                                         Canvas.Top="0"
-                                        Fill="Green"
+                                        Fill="#FFFFE901"
                                         Height="50"
                                         Width="50"/>
                                     <TextBlock
@@ -262,6 +335,8 @@
                                 </Canvas>
                                 <TextBlock
                                     Text="{x:Bind Name}"
+                                    Foreground="White"
+                                    Margin="5,0,0,0"
                                     VerticalAlignment="Center"/>
                             </StackPanel>
                         </DataTemplate>
@@ -273,12 +348,14 @@
                         Content="&#xE74D;"
                         FontFamily="Segoe MDL2 Assets"
                         Background="Transparent"
+                        Foreground="LightGray"
                         Width="50"
                         Height="50"
                         Click="{x:Bind SavedTreesViewModel.DeleteTree}"/>
                     <Button
                         x:Name="OpenTreeButton"
                         Content="Open"
+                        Foreground="White"
                         Click="OpenTreeButton_Click"/>
                 </StackPanel>
             </StackPanel>
@@ -291,9 +368,14 @@
                 </Grid.RowDefinitions>
                 <Grid
                     Grid.Row="0"
-                    Background="{ThemeResource AppBarBackgroundThemeBrush}"
-                    BorderBrush="{ThemeResource AppBarBorderThemeBrush}"
+                    BorderThickness="2"
                     Height="50">
+                    <Grid.Background>
+                        <SolidColorBrush Color="White" Opacity="0.3"/>
+                    </Grid.Background>
+                    <Grid.BorderBrush>
+                        <SolidColorBrush Color="#FF042334" Opacity="0.4"/>
+                    </Grid.BorderBrush>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="Auto"/>
                         <ColumnDefinition Width="*"/>
@@ -313,7 +395,8 @@
                         Text="{x:Bind ActiveTreeViewModel.Active.Name, Mode=OneWay, FallbackValue=Achievr}"
                         FontFamily="Arial"
                         FontSize="32"
-                        TextAlignment="Left"
+                        Foreground="#FF2E2D2D"
+                        TextAlignment="Center"
                         VerticalAlignment="Center"/>
                     <ToggleButton
                         Grid.Column="2"

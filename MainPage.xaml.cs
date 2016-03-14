@@ -3,6 +3,7 @@ using Windows.UI.Input;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Input;
+using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Shapes;
 
 namespace Achievr
@@ -36,15 +37,30 @@ namespace Achievr
                 return;
             foreach (AchievementNodeViewModel a in this.ActiveTreeViewModel.Active.Nodes)
             {
-                StackPanel achievementContainer = new StackPanel();
-                achievementContainer.Style = Resources["achievement-container-style"] as Style;
+                SolidColorBrush colorUnlocked = Resources["achievement-unlocked-color"] as SolidColorBrush;
+                SolidColorBrush colorLocked = Resources["achievement-locked-color"] as SolidColorBrush;
+                Grid achievementContainer = new Grid();
+                achievementContainer.Style = Resources["alt-achievement-container-style"] as Style;
+                achievementContainer.Background = a.Node.Unlocked
+                    ? colorUnlocked
+                    : colorLocked;
                 achievementContainer.PointerPressed += Achievement_Click;
-                Canvas.SetLeft(achievementContainer, a.Coordinates.Item1);
-                Canvas.SetTop(achievementContainer, a.Coordinates.Item2);
+                Canvas.SetLeft(achievementContainer, a.Coordinates.Item1 - 40);
+                Canvas.SetTop(achievementContainer, a.Coordinates.Item2 - 40);
+                RowDefinition row1 = new RowDefinition();
+                RowDefinition row2 = new RowDefinition();
+                RowDefinition row3 = new RowDefinition();
+                row1.Height = new GridLength(13.0);
+                row2.Height = new GridLength(1.0, GridUnitType.Star);
+                row3.Height = new GridLength(13.0);
+                achievementContainer.RowDefinitions.Add(row1);
+                achievementContainer.RowDefinitions.Add(row2);
+                achievementContainer.RowDefinitions.Add(row3);
                 mainCanvas.Children.Add(achievementContainer);
-                Image icon = new Image();
-                icon.Style = Resources[a.Node.Unlocked ? "achievement-icon-unlocked" : "achievement-icon-locked"] as Style;
-                achievementContainer.Children.Add(icon);
+                TextBlock scoreText = new TextBlock();
+                scoreText.Style = Resources["achievement-score-text"] as Style;
+                scoreText.Text = a.Node.ScoreValue.ToString();
+                achievementContainer.Children.Add(scoreText);
                 TextBlock titleText = new TextBlock();
                 titleText.Style = Resources["achievement-title-text"] as Style;
                 titleText.Text = a.Node.Title;
@@ -57,6 +73,9 @@ namespace Achievr
                     depArrow.Y1 = a.Coordinates.Item2;
                     depArrow.X2 = d.Coordinates.Item1;
                     depArrow.Y2 = d.Coordinates.Item2;
+                    depArrow.Stroke = d.Node.Unlocked
+                        ? colorUnlocked
+                        : colorLocked;
                     mainCanvas.Children.Add(depArrow);
                 }
             }
@@ -134,10 +153,10 @@ namespace Achievr
 
         private void Achievement_Click(object sender, PointerRoutedEventArgs e)
         {
-            int indexOfAchievement = mainCanvas.Children.IndexOf((StackPanel)sender);
+            int indexOfAchievement = mainCanvas.Children.IndexOf((Grid)sender);
             for (int i = indexOfAchievement; i >= 0; i--)
             {   // a hack to avoid counting dependency lines towards index
-                if (mainCanvas.Children[i].GetType() != typeof(StackPanel))
+                if (mainCanvas.Children[i].GetType() != typeof(Grid))
                     indexOfAchievement--;
             }
             ActiveTreeViewModel.Active.SelectedIndex = indexOfAchievement;
